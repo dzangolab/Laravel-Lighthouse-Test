@@ -19,7 +19,7 @@ This feature requires the `BuildsGraphQLQueries` trait:
 <?php
 namespace Tests\Feature;
 
-use Knevelina\LighthouseTest\BuildsGraphQLQueries;
+use Knevelina\LighthouseTest\Traits\BuildsGraphQLQueries;
 use Tests\TestCase;
 
 class FeatureTest extends TestCase
@@ -57,7 +57,7 @@ type Query {
 <?php
 namespace Tests\Feature;
 
-use Knevelina\LighthouseTest\BuildsGraphQLQueries;
+use Knevelina\LighthouseTest\Traits\BuildsGraphQLQueries;
 use Knevelina\LighthouseTest\Schema\Variable;
 use Tests\TestCase;
 
