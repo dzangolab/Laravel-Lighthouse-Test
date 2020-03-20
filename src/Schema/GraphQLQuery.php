@@ -3,6 +3,7 @@
 namespace Knevelina\LighthouseTest\Schema;
 
 use Illuminate\Http\UploadedFile;
+use InvalidArgumentException;
 
 /**
  * A constructed GraphQL query.
@@ -65,6 +66,10 @@ class GraphQLQuery
      */
     public function __construct(string $type, string $field, array $arguments, array $selection)
     {
+        if ($type !== 'query' && $type !== 'mutation') {
+            throw new InvalidArgumentException('Type must be either query or mutation.');
+        }
+
         $this->type = $type;
 
         $this->field = $field;
@@ -72,6 +77,46 @@ class GraphQLQuery
         $this->arguments = $arguments;
 
         $this->selection = $selection;
+    }
+
+    /**
+     * Get the type of the query; either "type" or "mutation".
+     * 
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get the field that is being queried or mutated.
+     *
+     * @return string
+     */
+    public function getField(): string
+    {
+        return $this->field;
+    }
+
+    /**
+     * Get the arguments given to the query or mutation.
+     *
+     * @return array
+     */
+    public function getArguments(): array
+    {
+        return $this->arguments;
+    }
+
+    /**
+     * Get the selection made of the returned data.
+     *
+     * @return array
+     */
+    public function getSelection(): array
+    {
+        return $this->selection;
     }
 
     /**

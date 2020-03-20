@@ -1,6 +1,6 @@
 <?php
 
-namespace Knevelina\LighthouseTest;
+namespace Knevelina\LighthouseTest\Traits;
 
 use Illuminate\Testing\TestResponse;
 use Knevelina\LighthouseTest\Schema\Enum;

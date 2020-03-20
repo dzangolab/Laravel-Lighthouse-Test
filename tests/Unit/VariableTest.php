@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Unit;
+
 use Knevelina\LighthouseTest\Schema\Variable;
 use PHPUnit\Framework\TestCase;
 

@@ -17,6 +17,11 @@
             "Knevelina\\LighthouseTest\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "require": {
         "illuminate/support": "^7.0",
         "nuwave/lighthouse": "^4.0"

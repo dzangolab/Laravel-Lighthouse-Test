@@ -1,6 +1,9 @@
 <?php
 
+namespace Tests\Unit;
+
 use Illuminate\Http\UploadedFile;
+use InvalidArgumentException;
 use Knevelina\LighthouseTest\Schema\Enum;
 use Knevelina\LighthouseTest\Schema\GraphQLQuery;
 use Knevelina\LighthouseTest\Schema\Variable;
@@ -12,19 +15,19 @@ use PHPUnit\Framework\TestCase;
  */
 class GraphQLQueryTest extends TestCase
 {
-    protected function assertQueryIs($expected, $type, $field, $arguments, $selection)
+    protected function assertQueryIs($expected, $type, $field, $arguments, $selection): void
     {
         $query = new GraphQLQuery($type, $field, $arguments, $selection);
 
         $this->assertEquals($expected, $query->getQuery());
     }
 
-    protected function assertAssociativeArrayIs(bool $associative, $array)
+    protected function assertAssociativeArrayIs(bool $associative, $array): void
     {
         $this->assertEquals($associative, GraphQLQuery::isAssociativeArray($array));
     }
 
-    public function testIsAssociativeArray()
+    public function testIsAssociativeArray(): void
     {
         $this->assertAssociativeArrayIs(true, ['a' => 1]);
         $this->assertAssociativeArrayIs(true, ['a' => 1, 'b' => 2]);
@@ -34,7 +37,7 @@ class GraphQLQueryTest extends TestCase
         $this->assertAssociativeArrayIs(false, [null]);
     }
 
-    public function testEmptyArgumentsEmptySelectionQuery()
+    public function testEmptyArgumentsEmptySelectionQuery(): void
     {
         $this->assertQueryIs(
             [
@@ -48,7 +51,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testOneArgument()
+    public function testOneArgument(): void
     {
         $this->assertQueryIs(
             [
@@ -62,7 +65,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testTwoArguments()
+    public function testTwoArguments(): void
     {
         $this->assertQueryIs(
             [
@@ -76,7 +79,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testNestedArguments()
+    public function testNestedArguments(): void
     {
         $this->assertQueryIs(
             [
@@ -90,7 +93,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testSequentialArrayArgument()
+    public function testSequentialArrayArgument(): void
     {
         $this->assertQueryIs(
             [
@@ -104,7 +107,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testNullArgument()
+    public function testNullArgument(): void
     {
         $this->assertQueryIs(
             [
@@ -118,7 +121,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testBooleanArgument()
+    public function testBooleanArgument(): void
     {
         $this->assertQueryIs(
             [
@@ -132,7 +135,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testNumericArgument()
+    public function testNumericArgument(): void
     {
         $this->assertQueryIs(
             [
@@ -146,7 +149,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testStringArgument()
+    public function testStringArgument(): void
     {
         $this->assertQueryIs(
             [
@@ -160,7 +163,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testEnumArgument()
+    public function testEnumArgument(): void
     {
         $this->assertQueryIs(
             [
@@ -174,7 +177,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testOneSelection()
+    public function testOneSelection(): void
     {
         $this->assertQueryIs(
             [
@@ -188,7 +191,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testTwoSelections()
+    public function testTwoSelections(): void
     {
         $this->assertQueryIs(
             [
@@ -202,7 +205,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testNestedSelection()
+    public function testNestedSelection(): void
     {
         $this->assertQueryIs(
             [
@@ -216,7 +219,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testSingleFile()
+    public function testSingleFile(): void
     {
         $file = UploadedFile::fake()->create('test', 5);
         $query = new GraphQLQuery(
@@ -240,7 +243,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testTwoFiles()
+    public function testTwoFiles(): void
     {
         $file1 = UploadedFile::fake()->create('test', 5);
         $file2 = UploadedFile::fake()->create('test', 5);
@@ -271,7 +274,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testNestedFile()
+    public function testNestedFile(): void
     {
         $file = UploadedFile::fake()->create('test', 5);
         $query = new GraphQLQuery(
@@ -295,7 +298,7 @@ class GraphQLQueryTest extends TestCase
         );
     }
 
-    public function testFileInArray()
+    public function testFileInArray(): void
     {
         $file = UploadedFile::fake()->create('test', 5);
         $query = new GraphQLQuery(
@@ -317,5 +320,36 @@ class GraphQLQueryTest extends TestCase
             ],
             $query->getQuery(['file' => $file])
         );
+    }
+
+    public function testValidTypeParam(): void
+    {
+        $query = new GraphQLQuery('query', 'foo', [], []);
+        $this->assertInstanceOf(GraphQLQuery::class, $query);
+
+        $mutation = new GraphQLQuery('mutation', 'foo', [], []);
+        $this->assertInstanceOf(GraphQLQuery::class, $mutation);
+    }
+
+    public function testInvalidTypeParam(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new GraphQLQuery('foo', 'foo', [], []);
+    }
+
+    public function testGetters(): void
+    {
+        $type = 'query';
+        $field = 'foo';
+        $args = ['id' => 1];
+        $selection = ['id'];
+
+        $query = new GraphQLQuery($type, $field, $args, $selection);
+
+        $this->assertEquals($type, $query->getType());
+        $this->assertEquals($field, $query->getField());
+        $this->assertEquals($args, $query->getArguments());
+        $this->assertEquals($selection, $query->getSelection());
     }
 }
