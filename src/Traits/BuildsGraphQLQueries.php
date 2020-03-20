@@ -102,7 +102,7 @@ trait BuildsGraphQLQueries
      */
     protected function postGraphQLMutation(string $field, array $arguments = [], array $selection = null)
     {
-        $mutation = $this->makeGraphQLQuery($field, $arguments, $selection);
+        $mutation = $this->makeGraphQLMutation($field, $arguments, $selection);
 
         return $this->postGraphQL($mutation->getQuery());
     }
