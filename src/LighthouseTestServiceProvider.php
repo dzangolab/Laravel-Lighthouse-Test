@@ -2,7 +2,6 @@
 
 namespace Knevelina\LighthouseTest;
 
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 
 class LighthouseTestServiceProvider extends ServiceProvider
