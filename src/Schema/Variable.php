@@ -17,7 +17,7 @@ class Variable
     /**
      * Construct a new variable.
      *
-     * @param string $value
+     * @param string $name
      */
     public function __construct(string $name)
     {

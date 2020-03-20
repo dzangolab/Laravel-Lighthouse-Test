@@ -27,10 +27,12 @@
         "nuwave/lighthouse": "^4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.0",
+        "phpstan/phpstan": "^0.12.17"
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "analyze": "vendor/bin/phpstan analyze"
     },
     "extra": {
         "laravel": {

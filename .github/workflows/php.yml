@@ -4,11 +4,23 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
 
 jobs:
-  build:
+  static-code-analysis:
+    name: "Static code analysis"
+    runs-on: ubuntu-latest
 
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+    
+    - name: Run phpstan
+      run: composer analyze
+
+  test:
+    name: "Tests"
     runs-on: ubuntu-latest
 
     steps:

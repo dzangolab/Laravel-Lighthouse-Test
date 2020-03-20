@@ -193,9 +193,9 @@ class GraphQLQuery
      * Format a (scalar) value according to the GraphQL standard.
      *
      * @param mixed $value
-     * @return void
+     * @return string
      */
-    protected function formatValue($value)
+    protected function formatValue($value): string
     {
         if (is_array($value) ) {
             if (static::isAssociativeArray($value)) {
@@ -214,7 +214,7 @@ class GraphQLQuery
         }
 
         if (is_numeric($value)) {
-            return $value;
+            return (string) $value;
         }
 
         if (is_string($value)) {
@@ -266,7 +266,7 @@ class GraphQLQuery
             'variables' => $variables
         ];
 
-        if (count($this->files) > 0) {
+        if (count($this->files)) {
             return array_merge(
                 [
                     'operations' => $query,

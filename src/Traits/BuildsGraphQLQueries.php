@@ -2,7 +2,6 @@
 
 namespace Knevelina\LighthouseTest\Traits;
 
-use Illuminate\Testing\TestResponse;
 use Knevelina\LighthouseTest\Schema\Enum;
 use Knevelina\LighthouseTest\Schema\GraphQLQuery;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
@@ -82,9 +81,9 @@ trait BuildsGraphQLQueries
      * @param string $field
      * @param array $arguments
      * @param array $selection
-     * @return TestResponse
+     * @return \Illuminate\Foundation\Testing\TestResponse|\Illuminate\Testing\TestResponse
      */
-    protected function postGraphQLQuery(string $field, array $arguments = [], array $selection = null): TestResponse
+    protected function postGraphQLQuery(string $field, array $arguments = [], array $selection = null)
     {
         $query = $this->makeGraphQLQuery($field, $arguments, $selection);
 
@@ -99,9 +98,9 @@ trait BuildsGraphQLQueries
      * @param string $field
      * @param array $arguments
      * @param array $selection
-     * @return TestResponse
+     * @return \Illuminate\Foundation\Testing\TestResponse|\Illuminate\Testing\TestResponse
      */
-    protected function postGraphQLMutation(string $field, array $arguments = [], array $selection = null): TestResponse
+    protected function postGraphQLMutation(string $field, array $arguments = [], array $selection = null)
     {
         $mutation = $this->makeGraphQLQuery($field, $arguments, $selection);
 
