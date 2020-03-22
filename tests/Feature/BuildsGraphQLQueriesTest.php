@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Knevelina\LighthouseTest\Traits\BuildsGraphQLQueries;
 use Knevelina\LighthouseTest\Schema\Enum;
 use Knevelina\LighthouseTest\Schema\GraphQLQuery;
+use Knevelina\LighthouseTest\Schema\Variable;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,6 +21,15 @@ class BuildsGraphQLQueriesTest extends TestCase
 
         $this->assertInstanceOf(Enum::class, $enum);
         $this->assertEquals('Test', $enum->__toString());
+    }
+
+    public function testMakesVariables(): void
+    {
+        $var = $this->makeVariable('test', 'String');
+
+        $this->assertInstanceOf(Variable::class, $var);
+        $this->assertEquals('test', $var->getName());
+        $this->assertEquals('String', $var->getType());
     }
 
     public function testMakesQueries(): void

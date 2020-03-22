@@ -225,13 +225,13 @@ class GraphQLQueryTest extends TestCase
         $query = new GraphQLQuery(
             'mutation',
             'upload',
-            ['file' => new Variable('file')],
+            ['file' => new Variable('file', 'Upload!')],
             []
         );
         $this->assertEquals(
             [
                 'operations' => [
-                    'query' => 'mutation { upload(file: $file) }',
+                    'query' => 'mutation($file: Upload!) { upload(file: $file) }',
                     'variables' => ['file' => null]
                 ],
                 'map' => [
@@ -252,15 +252,15 @@ class GraphQLQueryTest extends TestCase
             'mutation',
             'upload',
             [
-                'file1' => new Variable('file1'),
-                'file2' => new Variable('file2')
+                'file1' => new Variable('file1', 'Upload!'),
+                'file2' => new Variable('file2', 'Upload!')
             ],
             []
         );
         $this->assertEquals(
             [
                 'operations' => [
-                    'query' => 'mutation { upload(file1: $file1, file2: $file2) }',
+                    'query' => 'mutation($file1: Upload!, $file2: Upload!) { upload(file1: $file1, file2: $file2) }',
                     'variables' => ['file1' => null, 'file2' => null]
                 ],
                 'map' => [
@@ -280,21 +280,21 @@ class GraphQLQueryTest extends TestCase
         $query = new GraphQLQuery(
             'mutation',
             'upload',
-            ['a' => new Variable('a')],
+            ['input' => new Variable('input', 'FileInput!')],
             []
         );
         $this->assertEquals(
             [
                 'operations' => [
-                    'query' => 'mutation { upload(a: $a) }',
-                    'variables' => ['a' => ['file' => null]]
+                    'query' => 'mutation($input: FileInput!) { upload(input: $input) }',
+                    'variables' => ['input' => ['file' => null]]
                 ],
                 'map' => [
-                    'a.file' => 0
+                    'input.file' => 0
                 ],
                 0 => $file
             ],
-            $query->getQuery(['a' => ['file' => $file]])
+            $query->getQuery(['input' => ['file' => $file]])
         );
     }
 
@@ -304,13 +304,13 @@ class GraphQLQueryTest extends TestCase
         $query = new GraphQLQuery(
             'mutation',
             'upload',
-            ['a' => [ new Variable('file') ]],
+            ['input' => [ new Variable('file', 'Upload!') ]],
             []
         );
         $this->assertEquals(
             [
                 'operations' => [
-                    'query' => 'mutation { upload(a: [ $file ]) }',
+                    'query' => 'mutation($file: Upload!) { upload(input: [ $file ]) }',
                     'variables' => ['file' => null]
                 ],
                 'map' => [

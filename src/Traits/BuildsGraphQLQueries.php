@@ -4,6 +4,7 @@ namespace Knevelina\LighthouseTest\Traits;
 
 use Knevelina\LighthouseTest\Schema\Enum;
 use Knevelina\LighthouseTest\Schema\GraphQLQuery;
+use Knevelina\LighthouseTest\Schema\Variable;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 
 /**
@@ -72,6 +73,11 @@ trait BuildsGraphQLQueries
     protected function makeEnum(string $value): Enum
     {
         return new Enum($value);
+    }
+
+    protected function makeVariable(string $name, string $type): Variable
+    {
+        return new Variable($name, $type);
     }
 
     /**

@@ -10,10 +10,24 @@ use PHPUnit\Framework\TestCase;
  */
 class VariableTest extends TestCase
 {
+    public function testGetName()
+    {
+        $var = new Variable('test', 'String');
+        
+        $this->assertEquals('test', $var->getName());
+    }
+
+    public function testGetType()
+    {
+        $var = new Variable('test', 'String');
+
+        $this->assertEquals('String', $var->getType());
+    }
+
     public function testToString()
     {
-        $enum = new Variable('test');
+        $var = new Variable('test', 'String');
 
-        $this->assertEquals('$test', $enum->__toString());
+        $this->assertEquals('$test', $var->__toString());
     }
 }

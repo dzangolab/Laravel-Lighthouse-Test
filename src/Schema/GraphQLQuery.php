@@ -56,6 +56,13 @@ class GraphQLQuery
     private $files;
 
     /**
+     * The declared variables in the query.
+     *
+     * @var array
+     */
+    private $variables;
+
+    /**
      * Construct a new GraphQL query. Extra variables can be given when
      * formatting the query.
      *
@@ -76,7 +83,22 @@ class GraphQLQuery
 
         $this->arguments = $arguments;
 
+        $this->variables = [];
+
+        array_walk($this->arguments, [$this, 'findVariables']);
+
         $this->selection = $selection;
+    }
+
+    protected function findVariables(&$value, string $key)
+    {
+        if (is_array($value)) {
+            array_walk($value, [$this, 'findVariables']);
+        }
+
+        if ($value instanceof Variable) {
+            $this->variables[] = $value;
+        }
     }
 
     /**
@@ -126,13 +148,47 @@ class GraphQLQuery
      */
     protected function formatQuery(): string
     {
-        return sprintf("%s { %s }", $this->type, implode('', [
-            $this->field,
-            ((count($this->arguments) > 0) ? '(' : ''),
-            $this->formatArguments($this->arguments),
-            ((count($this->arguments) > 0) ? ')' : ''),
-            $this->formatSelectionSet($this->selection)
-        ]));
+        return sprintf(
+            "%s%s { %s }",
+
+            // Start with the type.
+            $this->type,
+
+            // If type declarations are required for variables, add them.
+            // Otherwise, add nothing.
+            ((count($this->variables) > 0)
+                ? sprintf("(%s)", $this->formatVariables($this->variables))
+                : ''),
+
+            // Now add the query itself.
+            implode('', [
+                // Add the field being queried.
+                $this->field,
+
+
+                // If the field requires arguments, add them. Otherwise, add
+                // nothing.
+                ((count($this->arguments) > 0)
+                    ? sprintf('(%s)', $this->formatArguments($this->arguments))
+                    : ''),
+                
+                // Finally, add the selection set.
+                $this->formatSelectionSet($this->selection)
+            ])
+        );
+    }
+
+    /**
+     * Format variable declarations for a query or mutation.
+     * 
+     * @param array $variables
+     * @return string
+     */
+    protected function formatVariables(array $variables): string
+    {
+        return implode(', ', array_map(function (Variable $var) {
+            return sprintf('$%s: %s', $var->getName(), $var->getType());
+        }, $variables));
     }
 
     /**
@@ -143,10 +199,6 @@ class GraphQLQuery
      */
     protected function formatArguments(array $arguments): string
     {
-        if (count($arguments) === 0) {
-            return '';
-        }
-
         array_walk($arguments, function (&$value, $key) {
             $value = sprintf('%s: %s', $key, $this->formatValue($value));
         });

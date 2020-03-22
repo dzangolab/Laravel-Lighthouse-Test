@@ -15,13 +15,42 @@ class Variable
     protected $name;
 
     /**
+     * The variable's type.
+     * 
+     * @var string
+     */
+    protected $type;
+
+    /**
      * Construct a new variable.
      *
      * @param string $name
+     * @param string $type
      */
-    public function __construct(string $name)
+    public function __construct(string $name, string $type)
     {
         $this->name = $name;
+        $this->type = $type;
+    }
+
+    /**
+     * Get the name of the variable.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the type of the variable.
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     /**
