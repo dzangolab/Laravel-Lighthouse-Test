@@ -58,7 +58,6 @@ type Query {
 namespace Tests\Feature;
 
 use Knevelina\LighthouseTest\Traits\BuildsGraphQLQueries;
-use Knevelina\LighthouseTest\Schema\Variable;
 use Tests\TestCase;
 
 class FeatureTest extends TestCase
@@ -67,7 +66,7 @@ class FeatureTest extends TestCase
 
     public function testQuery()
     {
-        $query = $this->makeGraphQLQuery('reverse', ['str' => new Variable('str')], []);
+        $query = $this->makeGraphQLQuery('reverse', ['str' => $this->makeVariable('str', 'String!'))], []);
 
         $response = $this->postGraphQL($query->getQuery(['str' => 'hello']));
 
