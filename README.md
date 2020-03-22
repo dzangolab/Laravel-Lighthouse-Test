@@ -79,6 +79,22 @@ class FeatureTest extends TestCase
 }
 ```
 
+### Using variables
+The `MakesGraphQLQueries` trait introduces the `makeVariable(string $name, string $type): Variable` method, which introduces a variable to your query. The variable will automatically be declared in the root `query` or `mutation` as an argument when constructing the query:
+
+```php
+$query = $this->makeGraphQLQuery('hero', ['name' => $this->makeVariable('name', 'String!'), ['id']);
+$query->getQuery(['name' => 'John Doe']);
+```
+
+```graphql
+query($name: String!) {
+    hero(name: $name) {
+        id
+    }
+}
+```
+
 #### Uploading files
 The `getQuery` method also supports instances of `Illuminate\Http\UploadedFile`, which means you can use Laravel's [fake uploaded files](https://laravel.com/docs/7.x/http-tests#testing-file-uploads) to test fields using the multipart file upload specification.
 
@@ -89,7 +105,7 @@ $query->getQuery([
 ```
 
 #### Using enum values
-This library is able to automatically format numbers, strings, files and (associative) arrays. Unfortunately, without a custom type, it is not possible to recognize the difference between regular strings and enums. Thus, when using enums, use the `Enum` wrapper object:
+This library is able to automatically format numbers, strings, files and (associative) arrays. Unfortunately, without a custom type, it is not possible to recognize the difference between regular strings and enums. Thus, when using enums, use the `Enum` wrapper object. You can create one with the `makeEnum(string $name): Enum` method.
 
 ```php
 $this->getMutation('setStatus', [
