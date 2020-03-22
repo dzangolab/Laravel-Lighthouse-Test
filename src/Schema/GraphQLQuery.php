@@ -265,14 +265,14 @@ class GraphQLQuery
             return $value ? 'true' : 'false';
         }
 
-        if (is_numeric($value)) {
-            return (string) $value;
-        }
-
         if (is_string($value)) {
             $value = str_replace('\\', '\\\\', $value);
             $value = str_replace('"', '\"', $value);
             return '"'.$value.'"';
+        }
+
+        if (is_numeric($value)) {
+            return (string) $value;
         }
 
         return (string) $value;

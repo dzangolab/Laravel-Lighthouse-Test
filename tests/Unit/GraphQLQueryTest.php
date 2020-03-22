@@ -352,4 +352,24 @@ class GraphQLQueryTest extends TestCase
         $this->assertEquals($args, $query->getArguments());
         $this->assertEquals($selection, $query->getSelection());
     }
+
+    public function testFormatsNumericStringsAsStrings(): void
+    {
+        // Previously, "0031612345678" (a phone number) would get formatted as
+        // a number. This test ensures that ONLY numeric types get treated as
+        // numbers, and strings get left alone.
+
+        $query = new GraphQLQuery('query', 'foo', ['phone' => '0031612345678'], []);
+
+        $this->assertQueryIs(
+            [
+                'query' => 'query { foo(phone: "0031612345678") }',
+                'variables' => []
+            ],
+            'query',
+            'foo',
+            ['phone' => '0031612345678'],
+            []
+        );
+    }
 }
