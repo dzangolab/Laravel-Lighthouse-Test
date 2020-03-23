@@ -5,7 +5,7 @@ namespace Knevelina\LighthouseTest\Traits;
 use Illuminate\Foundation\Testing\TestCase;
 use Knevelina\LighthouseTest\Constraints\GraphQLErrorMessageConstraint;
 
-trait InterpretsGraphQLResults
+trait InterpretsGraphQLResponses
 {
     public function assertHasGraphQLErrorMessage($response, string $message)
     {
