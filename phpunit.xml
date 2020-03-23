@@ -19,6 +19,7 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Schema</directory>
+            <directory suffix=".php">./src/Constraints</directory>
         </whitelist>
     </filter>
     <logging>

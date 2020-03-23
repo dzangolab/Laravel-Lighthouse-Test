@@ -79,7 +79,7 @@ class FeatureTest extends TestCase
 }
 ```
 
-### Using variables
+#### Using variables
 The `MakesGraphQLQueries` trait introduces the `makeVariable(string $name, string $type): Variable` method, which introduces a variable to your query. The variable will automatically be declared in the root `query` or `mutation` as an argument when constructing the query:
 
 ```php
@@ -115,3 +115,32 @@ $this->getMutation('setStatus', [
 
 #### Using results
 The query can be sent using Lighthouse's `postGraphQL` method, and thus you can refer to [Lighthouse's documentation on assertions](https://lighthouse-php.com/4.10/testing/phpunit.html#assertions) to use the queries to make assertions.
+
+### Interpreting GraphQL query results
+Laravel's default `TestResponse` is not really suited for asserting properties of GraphQL responses. The `InterpretsGraphQLResponses` trait aims to help with that.
+
+```php
+<?php
+namespace Tests\Feature;
+
+use Knevelina\LighthouseTest\Traits\InterpretsGraphQLResponses;
+use Tests\TestCase;
+
+class FeatureTest extends TestCase
+{
+    use InterpretsGraphQLResponses;
+}
+```
+
+You may now use the following assertions:
+
+```php
+$response = $this->graphQL($query);
+
+// Assert any error was returned.
+$this->assertHasGraphQLError($response);
+// Assert a certain error message was returned.
+$this->assertHasGraphQLErrorMessage($response, 'Unauthenticated.');
+// Assert no error has returned.
+$this->assertHasNoGraphQLError($response);
+```
