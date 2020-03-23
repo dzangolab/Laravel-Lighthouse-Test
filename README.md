@@ -141,4 +141,6 @@ $response = $this->graphQL($query);
 $this->assertHasGraphQLError($response);
 // Assert a certain error message was returned.
 $this->assertHasGraphQLErrorMessage($response, 'Unauthenticated.');
+// Assert no error has returned.
+$this->assertHasNoGraphQLError($response);
 ```
