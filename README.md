@@ -137,5 +137,8 @@ You may now use the following assertions:
 ```php
 $response = $this->graphQL($query);
 
+// Assert any error was returned.
+$this->assertHasGraphQLError($response);
+// Assert a certain error message was returned.
 $this->assertHasGraphQLErrorMessage($response, 'Unauthenticated.');
 ```
